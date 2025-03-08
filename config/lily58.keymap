@@ -30,7 +30,7 @@
             >;
         };
 
-        lower_layer {
+        layer_1 {
             // ------------------------------------------------------------------------------------------------------------
             // | BTCLR | BT1 | BT2 |  BT3 |  BT4 |  BT5 |                   |      |       |       |      |       |       |
             // |  F1   |  F2 |  F3 |  F4  |  F5  |  F6  |                   |  F7  |  F8   |  F9   |  F10 |  F11  |  F12  |
@@ -48,7 +48,7 @@
             >;
         };
 
-        layer_3 {
+        layer_2 {
             bindings = <
 &trans  &trans          &trans          &trans     &trans  &trans                    &trans  &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp KP_SLASH     &trans
 &trans  &trans          &kp UP_ARROW    &trans     &trans  &trans                    &trans  &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp KP_ASTERISK  &trans
