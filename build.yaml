@@ -13,8 +13,10 @@
 #
 ---
 include:
-  - board: nice_nano_v2
+  # ZMK main uses Zephyr 4.1 HWMv2 board names: nice_nano_v2 -> nice_nano//zmk
+  # (short for nice_nano@2.0.0//zmk; see ZMK blog 2025-12-09-zephyr-4-1)
+  - board: nice_nano//zmk
     shield: lily58_left nice_view_adapter nice_view
     snippet: studio-rpc-usb-uart
-  - board: nice_nano_v2
+  - board: nice_nano//zmk
     shield: lily58_right nice_view_adapter nice_view
