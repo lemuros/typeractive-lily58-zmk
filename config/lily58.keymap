@@ -4,57 +4,104 @@
  * SPDX-License-Identifier: MIT
  */
 
+/*
+ * Host OS keyboard layout is Czech (xkb "cz", QWERTZ). All bindings send
+ * positional US scancodes; the host maps them to Czech output. Symbol
+ * bindings below were derived from /usr/share/X11/xkb/symbols/cz "basic".
+ */
+
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 
+#define BASE  0
+#define LOWER 1
+#define RAISE 2
+
 / {
+    macros {
+        arrow_fat: arrow_fat {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <5>;
+            tap-ms = <5>;
+            bindings = <&kp MINUS &kp RA(DOT)>;   // "=>" under cz
+        };
+
+        eq_eq: eq_eq {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <5>;
+            tap-ms = <5>;
+            bindings = <&kp MINUS &kp MINUS>;     // "==" under cz
+        };
+
+        not_eq: not_eq {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <5>;
+            tap-ms = <5>;
+            bindings = <&kp LS(SQT) &kp MINUS>;   // "!=" under cz
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
         default_layer {
+            // Czech output (unshifted; number row gives digits on Shift):
             // ------------------------------------------------------------------------------------------------------------
-            // |  ESC  |  1  |  2  |  3   |  4   |  5   |                   |  6   |  7    |  8    |  9   |   0   |   `   |
-            // |  TAB  |  Q  |  W  |  E   |  R   |  T   |                   |  Y   |  U    |  I    |  O   |   P   |   -   |
-            // |  CTRL |  A  |  S  |  D   |  F   |  G   |                   |  H   |  J    |  K    |  L   |   ;   |   '   |
-            // | SHIFT |  Z  |  X  |  C   |  V   |  B   |   "["  |  |  "]"  |  N   |  M    |  ,    |  .   |   /   | SHIFT |
-            //                     | ALT  | GUI  | LOWER|  SPACE |  | ENTER | RAISE| BSPC  | GUI   |
+            // |  ESC  |  +  |  ě  |  š   |  č   |  ř   |                   |  ž   |  ý    |  á    |  í   |   é   |   ;   |
+            // |  TAB  |  q  |  w  |  e   |  r   |  t   |                   |  z   |  u    |  i    |  o   |   p   |   =   |
+            // |  CTRL |  a  |  s  |  d   |  f   |  g   |                   |  h   |  j    |  k    |  l   |   ů   |   §   |
+            // | SHIFT |  y  |  x  |  c   |  v   |  b   |   ú    |  |   )   |  n   |  m    |  ,    |  .   |   -   | SHIFT |
+            //                     | ALT  | GUI  | LOWER| SPACE  |  | ENTER | RAISE| BSPC  |  ---  |
 
             display-name = "Base";
             bindings = <
-&kp ESC         &kp N1  &kp N2  &kp N3     &kp N4            &kp N5                               &kp N6         &kp N7  &kp N8     &kp N9   &kp N0    &kp BACKSPACE
-&kp TAB         &kp Q   &kp W   &kp E      &kp R             &kp T                                &kp Y          &kp U   &kp I      &kp O    &kp P     &kp MINUS
-&kp LEFT_SHIFT  &kp A   &kp S   &kp D      &kp F             &kp G                                &kp H          &kp J   &kp K      &kp L    &kp SEMI  &kp SQT
-&kp LEFT_SHIFT  &kp Z   &kp X   &kp C      &kp V             &kp B         &kp LBKT     &kp RBKT  &kp N          &kp M   &kp COMMA  &kp DOT  &kp FSLH  &kp RSHFT
-                                &kp LCTRL  &kp LEFT_COMMAND  &kp LEFT_ALT  &kp SPACE    &kp RET   &kp RIGHT_ALT  &tog 1  &tog 2
+&kp ESC         &kp N1  &kp N2  &kp N3    &kp N4    &kp N5                            &kp N6   &kp N7     &kp N8     &kp N9   &kp N0    &kp GRAVE
+&kp TAB         &kp Q   &kp W   &kp E     &kp R     &kp T                             &kp Y    &kp U      &kp I      &kp O    &kp P     &kp MINUS
+&kp LCTRL       &kp A   &kp S   &kp D     &kp F     &kp G                             &kp H    &kp J      &kp K      &kp L    &kp SEMI  &kp SQT
+&kp LEFT_SHIFT  &kp Z   &kp X   &kp C     &kp V     &kp B      &kp LBKT     &kp RBKT  &kp N    &kp M      &kp COMMA  &kp DOT  &kp FSLH  &kp RSHFT
+                                &kp LALT  &kp LGUI  &mo LOWER  &kp SPACE    &kp RET   &mo RAISE  &kp BSPC  &none
             >;
         };
 
-        layer_1 {
+        lower_layer {
+            // Navigation / system:
             // ------------------------------------------------------------------------------------------------------------
-            // | BTCLR | BT1 | BT2 |  BT3 |  BT4 |  BT5 |                   |      |       |       |      |       |       |
-            // |  F1   |  F2 |  F3 |  F4  |  F5  |  F6  |                   |  F7  |  F8   |  F9   |  F10 |  F11  |  F12  |
-            // |   `   |  !  |  @  |  #   |  $   |  %   |                   |  ^   |  &    |  *    |  (   |   )   |   ~   |
-            // |       |     |     |      |      |      |        |  |       |      |  _    |  +    |  {   |   }   |  "|"  |
-            //                     |      |      |      |        |  |       |      |       |       |
+            // |  F1   |  F2  |  F3  |  F4  |  F5   |  F6  |                 |  F7  |  F8   |  F9   |  F10 |  F11  |  F12  |
+            // |       | HOME |  UP  | END  | PGUP  |      |                 |  INS | LEFT  | DOWN  |  UP  | RIGHT |  DEL  |
+            // |       | UNDO |  CUT | COPY | PASTE |      |                 | PREV | NEXT  | VOL-  | VOL+ | MUTE  |       |
+            // |       | BT1  |  BT2 | BT3  |  BT4  | BTCLR|      |  |       |      |       |       |      |       |       |
+            //                       |      |       |      |      |  |       |      |       |       |
 
             display-name = "Lower";
             bindings = <
-&kp F1        &kp F2        &kp F3  &kp F4    &kp F5      &kp F6                       &kp F7     &kp F8     &kp F9           &kp F10   &kp F11   &kp F12
-&kp F1        &kp F2        &kp F3  &kp F4    &kp F5      &kp F6                       &kp F7     &kp F8     &kp F9           &kp F10   &kp F11   &kp F12
-&kp GRAVE     &kp EXCL      &kp AT  &kp HASH  &kp DOLLAR  &kp PRCNT                    &kp CARET  &kp AMPS   &kp KP_MULTIPLY  &kp LPAR  &kp RPAR  &kp TILDE
-&bt BT_SEL 0  &bt BT_SEL 1  &trans  &trans    &trans      &trans     &trans    &trans  &trans     &kp MINUS  &kp KP_PLUS      &kp LBRC  &kp RBRC  &kp PIPE
-                                    &trans    &trans      &trans     &trans    &trans  &trans     &trans     &trans
+&kp F1  &kp F2        &kp F3        &kp F4        &kp F5        &kp F6                        &kp F7      &kp F8      &kp F9        &kp F10       &kp F11     &kp F12
+&trans  &kp HOME      &kp UP        &kp END       &kp PG_UP     &trans                        &kp INS     &kp LEFT    &kp DOWN      &kp UP        &kp RIGHT   &kp DEL
+&trans  &kp LC(Y)     &kp LC(X)     &kp LC(C)     &kp LC(V)     &trans                        &kp C_PREV  &kp C_NEXT  &kp C_VOL_DN  &kp C_VOL_UP  &kp C_MUTE  &trans
+&trans  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_CLR  &trans    &trans  &trans      &trans      &trans        &trans        &trans      &trans
+                                    &trans        &trans        &trans      &trans    &trans  &trans      &trans      &trans
             >;
         };
 
-        layer_2 {
+        raise_layer {
+            // Symbols (Czech output; keycodes are cz-layout combos):
+            // ------------------------------------------------------------------------------------------------------------
+            // |       |  !  |  @  |  #   |  $   |  %   |                   |  ^   |  &    |  *    |  (   |   )   |   ~   |
+            // |       |  {  |  }  |  [   |  ]   |  `   |                   |  <   |  >    |  =    |  +   |   \   |   |   |
+            // |       |  :  |  ;  |  ?   |  !   |  "   |                   |  '   |  _    |  -    |  /   |   *   |   %   |
+            // |       |  €  |     |  §   |  °   |      |        |  |       |      |  ,    |  .    |  =>  |  ==   |  !=   |
+            //                     |      |      |      |        |  |       |      |       |       |
+
+            display-name = "Raise";
             bindings = <
-&trans  &trans          &trans          &trans     &trans  &trans                    &trans  &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &kp KP_SLASH     &trans
-&trans  &trans          &kp UP_ARROW    &trans     &trans  &trans                    &trans  &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &kp KP_ASTERISK  &trans
-&trans  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT  &trans  &trans                    &trans  &kp KP_NUMBER_1  &kp KP_NUMBER_2  &kp KP_NUMBER_3  &kp KP_PLUS      &trans
-&trans  &trans          &trans          &trans     &trans  &trans  &trans    &trans  &trans  &kp KP_N0        &kp KP_DOT       &trans           &kp KP_SUBTRACT  &trans
-                                        &trans     &trans  &trans  &trans    &trans  &trans  &trans           &trans
+&trans  &kp LS(SQT)  &kp RA(N2)  &kp RA(N3)     &kp RA(N4)   &kp LS(MINUS)                    &kp RA(N6)     &kp RA(N7)    &kp RA(N8)  &kp LS(RBKT)  &kp RBKT      &kp RA(A)
+&trans  &kp RA(N9)   &kp RA(N0)  &kp RA(F)      &kp RA(G)    &kp RA(H)                        &kp RA(COMMA)  &kp RA(DOT)   &kp MINUS   &kp N1        &kp RA(Q)     &kp RA(W)
+&trans  &kp LS(DOT)  &kp GRAVE   &kp LS(COMMA)  &kp LS(SQT)  &kp LS(SEMI)                     &kp RA(J)      &kp LS(FSLH)  &kp FSLH    &kp LS(LBKT)  &kp RA(FSLH)  &kp LS(MINUS)
+&trans  &kp RA(E)    &none       &kp SQT        &kp RA(Z)    &trans         &trans    &trans  &trans         &kp COMMA     &kp DOT     &arrow_fat    &eq_eq        &not_eq
+                                 &trans         &trans       &trans         &trans    &trans  &trans         &trans        &trans
             >;
         };
     };

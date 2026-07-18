@@ -1,0 +1,14 @@
+# Claude Code
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+
+# Build output
+build/
+*.uf2
+*.hex
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
