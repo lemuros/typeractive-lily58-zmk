@@ -19,6 +19,17 @@
 #define RAISE 2
 
 / {
+    behaviors {
+        // Tap = "{" (RA(N9), cz AltGr+9). Shift+tap = "}" (RA(N0), cz AltGr+0),
+        // with the real Shift masked so it doesn't stack onto the AltGr combo.
+        brace_key: brace_key {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp RA(N9)>, <&kp RA(N0)>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+    };
+
     macros {
         arrow_fat: arrow_fat {
             compatible = "zmk,behavior-macro";
@@ -52,17 +63,17 @@
             // Czech output (unshifted; number row gives digits on Shift):
             // ------------------------------------------------------------------------------------------------------------
             // |  ESC  |  +  |  ě  |  š   |  č   |  ř   |                   |  ž   |  ý    |  á    |  í   |   é   |   ;   |
-            // |  TAB  |  q  |  w  |  e   |  r   |  t   |                   |  z   |  u    |  i    |  o   |   p   |   =   |
+            // |  TAB  |  q  |  w  |  e   |  r   |  t   |                   |  z   |  u    |  i    |  o   |   p   |   ú   |
             // |  CTRL |  a  |  s  |  d   |  f   |  g   |                   |  h   |  j    |  k    |  l   |   ů   |   §   |
-            // | SHIFT |  y  |  x  |  c   |  v   |  b   |   ú    |  |   )   |  n   |  m    |  ,    |  .   |   -   | SHIFT |
+            // | SHIFT |  y  |  x  |  c   |  v   |  b   |  {/}   |  |   )   |  n   |  m    |  ,    |  .   |   -   | SHIFT |
             //                     | ALT  | GUI  | LOWER| SPACE  |  | ENTER | RAISE| BSPC  |  ---  |
 
             display-name = "Base";
             bindings = <
 &kp ESC         &kp N1  &kp N2  &kp N3    &kp N4    &kp N5                            &kp N6   &kp N7     &kp N8     &kp N9   &kp N0    &kp GRAVE
-&kp TAB         &kp Q   &kp W   &kp E     &kp R     &kp T                             &kp Y    &kp U      &kp I      &kp O    &kp P     &kp MINUS
+&kp TAB         &kp Q   &kp W   &kp E     &kp R     &kp T                             &kp Y    &kp U      &kp I      &kp O    &kp P     &kp LBKT
 &kp LCTRL       &kp A   &kp S   &kp D     &kp F     &kp G                             &kp H    &kp J      &kp K      &kp L    &kp SEMI  &kp SQT
-&kp LEFT_SHIFT  &kp Z   &kp X   &kp C     &kp V     &kp B      &kp LBKT     &kp RBKT  &kp N    &kp M      &kp COMMA  &kp DOT  &kp FSLH  &kp RSHFT
+&kp LEFT_SHIFT  &kp Z   &kp X   &kp C     &kp V     &kp B      &brace_key   &kp RBKT  &kp N    &kp M      &kp COMMA  &kp DOT  &kp FSLH  &kp RSHFT
                                 &kp LALT  &kp LGUI  &mo LOWER  &kp SPACE    &kp RET   &mo RAISE  &kp BSPC  &none
             >;
         };
